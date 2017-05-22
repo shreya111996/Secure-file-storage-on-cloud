@@ -1,0 +1,736 @@
+SQL> create table customer as(select * from sh.customers);
+
+Table created.
+
+Elapsed: 00:00:04.74
+
+SQL> Create table customers_copy_bitmap  as (select * from sh.customers);
+
+Table created.
+
+Elapsed: 00:00:02.16
+SQL> Create table customers_copy_btree  as (select * from sh.customers);
+
+Table created.
+
+Elapsed: 00:00:01.77
+
+SQL> create index cus_gender_btree_idx on customers_copy_btree(cust_gender);
+
+Index created.
+
+Elapsed: 00:00:01.56
+SQL> create index cus_yob_btree_idx on customers_copy_btree(cust_year_of_birth);
+
+Index created.
+
+Elapsed: 00:00:00.21
+SQL> create index cus_lname_btree_idx on customers_copy_btree(cust_last_name);
+
+Index created.
+
+Elapsed: 00:00:00.32
+SQL> create index cus_adr_btree_idx on customers_copy_btree(cust_street_address);
+
+Index created.
+
+Elapsed: 00:00:00.42
+
+SQL> create bitmap index cus_gender_bix on customers_copy_bitmap(cust_gender);
+
+Index created.
+
+Elapsed: 00:00:00.85
+SQL> create bitmap index cus_yob_bix on customers_copy_bitmap(cust_year_of_birth);
+
+Index created.
+
+Elapsed: 00:00:00.20
+
+SQL> create bitmap index cus_adr_bix on customers_copy_bitmap(cust_street_address);
+
+Index created.
+
+Elapsed: 00:00:00.18
+SQL> select segment_name
+  2  ,     bytes/1024/1024 "Size in MB"
+  3    from   user_segments
+  4    where  segment_name like 'CUSTOMERS_COPY%';
+
+SEGMENT_NAME
+--------------------------------------------------------------------------------
+Size in MB
+----------
+CUSTOMERS_COPY_BITMAP
+        12
+
+CUSTOMERS_COPY_BTREE
+        12
+
+
+Elapsed: 00:00:00.07
+SQL> select count(*) from customers_copy_bitmap;
+
+  COUNT(*)
+----------
+     55500
+
+Elapsed: 00:00:00.04
+SQL>
+
+SQL> select * from user_segments where segment_name like 'CUSTOMERS_COPY%';
+
+SEGMENT_NAME
+--------------------------------------------------------------------------------
+PARTITION_NAME                 SEGMENT_TYPE       SEGMENT_SU
+------------------------------ ------------------ ----------
+TABLESPACE_NAME                     BYTES     BLOCKS    EXTENTS INITIAL_EXTENT
+------------------------------ ---------- ---------- ---------- --------------
+NEXT_EXTENT MIN_EXTENTS MAX_EXTENTS   MAX_SIZE RETENTI MINRETENTION PCT_INCREASE
+----------- ----------- ----------- ---------- ------- ------------ ------------
+ FREELISTS FREELIST_GROUPS BUFFER_ FLASH_C CELL_FL
+---------- --------------- ------- ------- -------
+CUSTOMERS_COPY_BITMAP
+                               TABLE              ASSM
+USERS                            12582912       1536         27          65536
+
+SEGMENT_NAME
+--------------------------------------------------------------------------------
+PARTITION_NAME                 SEGMENT_TYPE       SEGMENT_SU
+------------------------------ ------------------ ----------
+TABLESPACE_NAME                     BYTES     BLOCKS    EXTENTS INITIAL_EXTENT
+------------------------------ ---------- ---------- ---------- --------------
+NEXT_EXTENT MIN_EXTENTS MAX_EXTENTS   MAX_SIZE RETENTI MINRETENTION PCT_INCREASE
+----------- ----------- ----------- ---------- ------- ------------ ------------
+ FREELISTS FREELIST_GROUPS BUFFER_ FLASH_C CELL_FL
+---------- --------------- ------- ------- -------
+    1048576           1  2147483645 2147483645
+                           DEFAULT DEFAULT DEFAULT
+
+
+SEGMENT_NAME
+--------------------------------------------------------------------------------
+PARTITION_NAME                 SEGMENT_TYPE       SEGMENT_SU
+------------------------------ ------------------ ----------
+TABLESPACE_NAME                     BYTES     BLOCKS    EXTENTS INITIAL_EXTENT
+------------------------------ ---------- ---------- ---------- --------------
+NEXT_EXTENT MIN_EXTENTS MAX_EXTENTS   MAX_SIZE RETENTI MINRETENTION PCT_INCREASE
+----------- ----------- ----------- ---------- ------- ------------ ------------
+ FREELISTS FREELIST_GROUPS BUFFER_ FLASH_C CELL_FL
+---------- --------------- ------- ------- -------
+CUSTOMERS_COPY_BTREE
+                               TABLE              ASSM
+USERS                            12582912       1536         27          65536
+
+SEGMENT_NAME
+--------------------------------------------------------------------------------
+PARTITION_NAME                 SEGMENT_TYPE       SEGMENT_SU
+------------------------------ ------------------ ----------
+TABLESPACE_NAME                     BYTES     BLOCKS    EXTENTS INITIAL_EXTENT
+------------------------------ ---------- ---------- ---------- --------------
+NEXT_EXTENT MIN_EXTENTS MAX_EXTENTS   MAX_SIZE RETENTI MINRETENTION PCT_INCREASE
+----------- ----------- ----------- ---------- ------- ------------ ------------
+ FREELISTS FREELIST_GROUPS BUFFER_ FLASH_C CELL_FL
+---------- --------------- ------- ------- -------
+    1048576           1  2147483645 2147483645
+                           DEFAULT DEFAULT DEFAULT
+
+
+Elapsed: 00:00:00.10
+SQL> SET LINESIZE 1000;
+SQL> select * from user_segments where segment_name like 'CUSTOMERS_COPY%';
+
+SEGMENT_NAME                                                                      PARTITION_NAME         SEGMENT_TYPE
+    SEGMENT_SU TABLESPACE_NAME                     BYTES     BLOCKS    EXTENTS INITIAL_EXTENT NEXT_EXTENT MIN_EXTENTS MA
+X_EXTENTS   MAX_SIZE RETENTI MINRETENTION PCT_INCREASE  FREELISTS FREELIST_GROUPS BUFFER_ FLASH_C CELL_FL
+--------------------------------------------------------------------------------- ------------------------------ -------
+----------- ---------- ------------------------------ ---------- ---------- ---------- -------------- ----------- ------
+----- ----------- ---------- ------- ------------ ------------ ---------- --------------- ------- ------- -------
+CUSTOMERS_COPY_BITMAP                                                                                    TABLE
+    ASSM       USERS                            12582912       1536         27          65536     1048576           1  2
+147483645 2147483645                                                              DEFAULT DEFAULT DEFAULT
+CUSTOMERS_COPY_BTREE                                                                                     TABLE
+    ASSM       USERS                            12582912       1536         27          65536     1048576           1  2
+147483645 2147483645                                                              DEFAULT DEFAULT DEFAULT
+
+Elapsed: 00:00:00.06
+SQL> SET LINESIZE 1500;
+SQL> select * from user_segments where segment_name like 'CUSTOMERS_COPY%';
+
+SEGMENT_NAME                                                                      PARTITION_NAME         SEGMENT_TYPE
+    SEGMENT_SU TABLESPACE_NAME                     BYTES     BLOCKS    EXTENTS INITIAL_EXTENT NEXT_EXTENT MIN_EXTENTS MA
+X_EXTENTS   MAX_SIZE RETENTI MINRETENTION PCT_INCREASE  FREELISTS FREELIST_GROUPS BUFFER_ FLASH_C CELL_FL
+--------------------------------------------------------------------------------- ------------------------------ -------
+----------- ---------- ------------------------------ ---------- ---------- ---------- -------------- ----------- ------
+----- ----------- ---------- ------- ------------ ------------ ---------- --------------- ------- ------- -------
+CUSTOMERS_COPY_BITMAP                                                                                    TABLE
+    ASSM       USERS                            12582912       1536         27          65536     1048576           1  2
+147483645 2147483645                                                              DEFAULT DEFAULT DEFAULT
+CUSTOMERS_COPY_BTREE                                                                                     TABLE
+    ASSM       USERS                            12582912       1536         27          65536     1048576           1  2
+147483645 2147483645                                                              DEFAULT DEFAULT DEFAULT
+
+Elapsed: 00:00:00.01
+
+Elapsed: 00:00:00.01
+SQL> select segment_name
+  2    ,     bytes/1024/1024 "Size in MB"
+  3   from   user_segments
+  4   where  segment_name like '%_IDX';
+
+SEGMENT_NAME                                                                      Size in MB
+--------------------------------------------------------------------------------- ----------
+CUS_GENDER_BTREE_IDX                                                                    .875
+CUS_YOB_BTREE_IDX                                                                          1
+CUS_LNAME_BTREE_IDX                                                                        2
+CUS_ADR_BTREE_IDX                                                                          3
+
+Elapsed: 00:00:00.03
+
+
+SQL> select segment_name
+  2    ,     bytes/1024/1024 "Size in MB"
+  3    from   user_segments
+  4    where  segment_name like '%_BIX';
+
+SEGMENT_NAME                                                                      Size in MB
+--------------------------------------------------------------------------------- ----------
+CUS_GENDER_BIX                                                                         .0625
+CUS_YOB_BIX                                                                            .1875
+CUS_ADR_BIX                                                                                3
+
+Elapsed: 00:00:00.04
+SQL> select * from   customers_copy_btree where  cust_year_of_birth = 1967;
+
+956 rows selected.
+
+Elapsed: 00:00:03.07
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2533345702
+
+------------------------------------------------------------------------------------------
+| Id  | Operation         | Name                 | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT  |                      |   956 |   278K|   405   (1)| 00:00:05 |
+|*  1 |  TABLE ACCESS FULL| CUSTOMERS_COPY_BTREE |   956 |   278K|   405   (1)| 00:00:05 |
+------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   1 - filter("CUST_YEAR_OF_BIRTH"=1967)
+
+Note
+-----
+   - dynamic sampling used for this statement (level=2)
+
+SQL>select * from   customers_copy_btree where  cust_year_of_birth = 1972;
+   CUST_ID CUST_FIRST_NAME      CUST_LAST_NAME                           C CUST_YEAR_OF_BIRTH CUST_MARITAL_STATUS  CUST_
+STREET_ADDRESS                      CUST_POSTA CUST_CITY
+---------- -------------------- ---------------------------------------- - ------------------ -------------------- -----
+----------------------------------- ---------- ------------------------------
+CUST_CITY_ID CUST_STATE_PROVINCE                      CUST_STATE_PROVINCE_ID COUNTRY_ID CUST_MAIN_PHONE_NUMBER    CUST_I
+NCOME_LEVEL              CUST_CREDIT_LIMIT CUST_EMAIL
+------------ ---------------------------------------- ---------------------- ---------- ------------------------- ------
+------------------------ ----------------- ------------------------------
+CUST_TOTAL     CUST_TOTAL_ID CUST_SRC_ID CUST_EFF_ CUST_EFF_ C
+-------------- ------------- ----------- --------- --------- -
+       51989 MS                                                        52658      52790 661-200-8677      J: 190,000 - 2
+49,999                       11000 Yaskovich@company.com
+Customer total         52772             01-JAN-98           A
+
+
+902 rows selected.
+
+Elapsed: 00:00:02.73
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2533345702
+
+------------------------------------------------------------------------------------------
+| Id  | Operation         | Name                 | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT  |                      |   902 |   262K|   405   (1)| 00:00:05 |
+|*  1 |  TABLE ACCESS FULL| CUSTOMERS_COPY_BTREE |   902 |   262K|   405   (1)| 00:00:05 |
+------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   1 - filter("CUST_YEAR_OF_BIRTH"=1972)
+
+Note
+-----
+   - dynamic sampling used for this statement (level=2)
+SQL>select * from   customers_copy_btree where  cust_year_of_birth = 1972 AND cust_gender='M';
+
+
+
+   CUST_ID CUST_FIRST_NAME      CUST_LAST_NAME                           C CUST_YEAR_OF_BIRTH CUST_MARITAL_STATUS  CUST_
+STREET_ADDRESS                      CUST_POSTA CUST_CITY
+---------- -------------------- ---------------------------------------- - ------------------ -------------------- -----
+----------------------------------- ---------- ------------------------------
+CUST_CITY_ID CUST_STATE_PROVINCE                      CUST_STATE_PROVINCE_ID COUNTRY_ID CUST_MAIN_PHONE_NUMBER    CUST_I
+NCOME_LEVEL              CUST_CREDIT_LIMIT CUST_EMAIL
+------------ ---------------------------------------- ---------------------- ---------- ------------------------- ------
+------------------------ ----------------- ------------------------------
+CUST_TOTAL     CUST_TOTAL_ID CUST_SRC_ID CUST_EFF_ CUST_EFF_ C
+-------------- ------------- ----------- --------- --------- -
+       52308 WI                                                        52760      52790 568-523-5823      B: 30,000 - 49
+,999                          1500 Waite@company.com
+Customer total         52772             01-JAN-98           A
+
+    104482 Cassidy              Yaskovich                                M               1972 NeverM       27 East Straf
+ford Boulevard              40453      North Carrollton
+       51989 MS                                                        52658      52790 661-200-8677      J: 190,000 - 2
+49,999                       11000 Yaskovich@company.com
+Customer total         52772             01-JAN-98           A
+
+
+616 rows selected.
+
+Elapsed: 00:00:02.15
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2315448325
+
+---------------------------------------------------------------------------------------------------------
+| Id  | Operation                        | Name                 | Rows  | Bytes | Cost (%CPU)| Time  |
+---------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                 |                      |   424 |   123K|    90   (0)| 00:00:02 |
+|   1 |  TABLE ACCESS BY INDEX ROWID     | CUSTOMERS_COPY_BTREE |   424 |   123K|    90   (0)| 00:00:02 |
+|   2 |   BITMAP CONVERSION TO ROWIDS    |                      |       |       |            |       |
+|   3 |    BITMAP AND                    |                      |       |       |            |       |
+|   4 |     BITMAP CONVERSION FROM ROWIDS|                      |       |       |            |       |
+|*  5 |      INDEX RANGE SCAN            | CUS_YOB_BTREE_IDX    |       |       |     2   (0)| 00:00:01 |
+|   6 |     BITMAP CONVERSION FROM ROWIDS|                      |       |       |            |       |
+|*  7 |      INDEX RANGE SCAN            | CUS_GENDER_BTREE_IDX |       |       |    87   (0)| 00:00:02 |
+---------------------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   5 - access("CUST_YEAR_OF_BIRTH"=1972)
+   7 - access("CUST_GENDER"='M')
+
+Note
+-----
+   - dynamic sampling used for this statement (level=2)
+
+
+SQL>select * from   customers_copy_bitmap where  cust_year_of_birth = 1967;
+
+
+   CUST_ID CUST_FIRST_NAME      CUST_LAST_NAME                           C CUST_YEAR_OF_BIRTH CUST_MARITAL_STATUS  CUST_
+STREET_ADDRESS                      CUST_POSTA CUST_CITY
+---------- -------------------- ---------------------------------------- - ------------------ -------------------- -----
+----------------------------------- ---------- ------------------------------
+CUST_CITY_ID CUST_STATE_PROVINCE                      CUST_STATE_PROVINCE_ID COUNTRY_ID CUST_MAIN_PHONE_NUMBER    CUST_I
+NCOME_LEVEL              CUST_CREDIT_LIMIT CUST_EMAIL
+------------ ---------------------------------------- ---------------------- ---------- ------------------------- ------
+------------------------ ----------------- ------------------------------
+CUST_TOTAL     CUST_TOTAL_ID CUST_SRC_ID CUST_EFF_ CUST_EFF_ C
+-------------- ------------- ----------- --------- --------- -
+Customer total         52772             01-JAN-98           A
+
+
+956 rows selected.
+
+Elapsed: 00:00:02.65
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3003431057
+
+------------------------------------------------------------------------------------------------------
+| Id  | Operation                    | Name                  | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT             |                       |   956 |   278K|    97   (0)| 00:00:02 |
+|   1 |  TABLE ACCESS BY INDEX ROWID | CUSTOMERS_COPY_BITMAP |   956 |   278K|    97   (0)| 00:00:02 |
+|   2 |   BITMAP CONVERSION TO ROWIDS|                       |       |       |            |          |
+|*  3 |    BITMAP INDEX SINGLE VALUE | CUS_YOB_BIX           |       |       |            |          |
+------------------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   3 - access("CUST_YEAR_OF_BIRTH"=1967)
+
+Note
+-----
+   - dynamic sampling used for this statement (level=2)
+
+
+SQL>select * from   customers_copy_btree where  cust_year_of_birth = 1972 AND cust_gender='M';
+
+
+
+   CUST_ID CUST_FIRST_NAME      CUST_LAST_NAME                           C CUST_YEAR_OF_BIRTH CUST_MARITAL_STATUS  CUST_
+STREET_ADDRESS                      CUST_POSTA CUST_CITY
+---------- -------------------- ---------------------------------------- - ------------------ -------------------- -----
+----------------------------------- ---------- ------------------------------
+CUST_CITY_ID CUST_STATE_PROVINCE                      CUST_STATE_PROVINCE_ID COUNTRY_ID CUST_MAIN_PHONE_NUMBER    CUST_I
+NCOME_LEVEL              CUST_CREDIT_LIMIT CUST_EMAIL
+------------ ---------------------------------------- ---------------------- ---------- ------------------------- ------
+------------------------ ----------------- ------------------------------
+CUST_TOTAL     CUST_TOTAL_ID CUST_SRC_ID CUST_EFF_ CUST_EFF_ C
+-------------- ------------- ----------- --------- --------- -
+       52308 WI                                                        52760      52790 568-523-5823      B: 30,000 - 49
+,999                          1500 Waite@company.com
+Customer total         52772             01-JAN-98           A
+
+    104482 Cassidy              Yaskovich                                M               1972 NeverM       27 East Straf
+ford Boulevard              40453      North Carrollton
+       51989 MS                                                        52658      52790 661-200-8677      J: 190,000 - 2
+49,999                       11000 Yaskovich@company.com
+Customer total         52772             01-JAN-98           A
+
+
+616 rows selected.
+
+Elapsed: 00:00:02.26
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3114378942
+
+------------------------------------------------------------------------------------------------------
+| Id  | Operation                    | Name                  | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT             |                       |   448 |   130K|     3   (0)| 00:00:01 |
+|   1 |  TABLE ACCESS BY INDEX ROWID | CUSTOMERS_COPY_BITMAP |   448 |   130K|     3   (0)| 00:00:01 |
+|   2 |   BITMAP CONVERSION TO ROWIDS|                       |       |       |            |          |
+|   3 |    BITMAP AND                |                       |       |       |            |          |
+|*  4 |     BITMAP INDEX SINGLE VALUE| CUS_YOB_BIX           |       |       |            |          |
+|*  5 |     BITMAP INDEX SINGLE VALUE| CUS_GENDER_BIX        |       |       |            |          |
+------------------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   4 - access("CUST_YEAR_OF_BIRTH"=1972)
+   5 - access("CUST_GENDER"='M')
+
+Note
+-----
+   - dynamic sampling used for this statement (level=2)
+
+SQL> create index test_cust_id_1_idx on customers_copy_btree (cust_id);
+
+Index created.
+
+Elapsed: 00:00:00.07
+SQL> create index test_cust_id_2_idx on customers_copy_bitmap (cust_id);
+
+Index created.
+
+Elapsed: 00:00:00.53
+
+
+SQL> declare
+  2  upd_cust_id number(5);
+  3  cust_yob_value number(4);
+  4  begin
+  5  for i in 1 .. 500 loop
+  6  upd_cust_id := dbms_random.value(1,55000);
+  7  cust_yob_value := dbms_random.value(1900,2000);
+  8  update customers_copy_btree
+  9  set cust_year_of_birth = cust_yob_value
+ 10  where cust_id = upd_cust_id;
+ 11  commit;
+ 12  end loop;
+ 13   end;
+ 14    /
+
+PL/SQL procedure successfully completed.
+
+Elapsed: 00:00:00.28
+SQL> declare
+  2  upd_cust_id number(5);
+  3  cust_yob_value number(4);
+  4  begin
+  5  for i in 1 .. 500 loop
+  6  upd_cust_id := dbms_random.value(1,55000);
+  7  cust_yob_value := dbms_random.value(1900,2000);
+  8  update customers_copy_bitmap
+  9  set cust_year_of_birth = cust_yob_value
+ 10  where cust_id = upd_cust_id;
+ 11  commit;
+ 12    end loop;
+ 13  end;
+ 14   /
+
+PL/SQL procedure successfully completed.
+
+Elapsed: 00:00:00.29
+
+SQL> SET AUTOTRACE OFF;
+SQL> select segment_name
+  2    ,     bytes/1024/1024 "Size in MB"
+  3  from   user_segments
+  4  where  segment_name in ('CUS_YOB_BTREE_IDX','CUS_YOB_BIX');
+
+SEGMENT_NAME                                                                      Size in MB
+--------------------------------------------------------------------------------- ----------
+CUS_YOB_BIX                                                                            .1875
+CUS_YOB_BTREE_IDX                                                                          2
+
+Elapsed: 00:00:00.04
+
+
+SQL> Create table customers_bijx_test_bitmap as select * from sh.customers;
+
+Table created.
+
+SQL> set timing on;
+SQL> Create table sales_bijx_test_bitmap as select * from sh.sales;
+
+Table created.
+
+Elapsed: 00:00:06.24
+
+
+
+Elapsed: 00:00:00.00
+SQL> create bitmap index sales_bijx_test_bitmap_bix1 on sales_bijx_test_bitmap(cust_id);
+
+Index created.
+
+Elapsed: 00:00:01.73
+SQL> create bitmap index cust_bijx_test_bitmap_bix1 on customers_bijx_test_bitmap(cust_last_name);
+
+Index created.
+
+Elapsed: 00:00:00.64
+SQL> Create table customers_bijx_test_bitjoin as (select * from sh.customers);
+
+Table created.
+
+Elapsed: 00:00:00.73
+SQL> alter table customers_bijx_test_bitjoin add constraint cust_bijx_test_bitjoin_pk primary key (cust_id);
+
+Table altered.
+
+Elapsed: 00:00:00.42
+SQL> Create table sales_bijx_test_bitjoin as (select * from sh.sales);
+
+Table created.
+
+Elapsed: 00:00:02.65
+
+
+Elapsed: 00:00:02.65
+SQL> create bitmap index sales_bijx_test_bitjoin_bjx1 on sales_bijx_test_bitjoin(customers_bijx_test_bitjoin.cust_id)
+  2  from sales_bijx_test_bitjoin, customers_bijx_test_bitjoin
+  3    where sales_bijx_test_bitjoin.cust_id = customers_bijx_test_bitjoin.cust_id;
+
+Index created.
+
+Elapsed: 00:00:04.18
+SQL>
+SQL> create bitmap index sales_bijx_test_bitjoin_bjx2 on sales_bijx_test_bitjoin(customers_bijx_test_bitjoin.cust_last_n
+ame)
+  2  from sales_bijx_test_bitjoin, customers_bijx_test_bitjoin
+  3  where sales_bijx_test_bitjoin.cust_id = customers_bijx_test_bitjoin.cust_id;
+
+Index created.
+
+Elapsed: 00:00:01.43
+
+insert into emp values(1,'a');
+insert into emp values(2,'b');
+insert into emp values(3,'c');
+
+insert into emp values(4,'d');
+
+insert into emp values(5,'e');
+
+insert into emp values(6,'f');
+insert into emp values(7,'g');
+insert into emp values(8,'h');
+insert into emp values(9,'i');
+insert into emp values(10,'j');
+
+SQL> create table emp(
+  2  id int,
+  3  name varchar(10));
+
+Table created.
+
+Elapsed: 00:00:00.09
+
+
+Elapsed: 00:00:00.00
+SQL> insert into emp values(1,'a');
+
+1 row created.
+
+Elapsed: 00:00:00.03
+SQL> insert into emp values(2,'b');
+
+1 row created.
+
+Elapsed: 00:00:00.00
+SQL> insert into emp values(3,'c');
+
+1 row created.
+
+Elapsed: 00:00:00.00
+SQL>
+SQL> insert into emp values(4,'d');
+
+1 row created.
+
+Elapsed: 00:00:00.00
+SQL>
+SQL> insert into emp values(5,'e');
+
+1 row created.
+
+Elapsed: 00:00:00.00
+SQL>
+SQL> insert into emp values(6,'f');
+
+1 row created.
+
+Elapsed: 00:00:00.00
+SQL> insert into emp values(7,'g');
+
+1 row created.
+
+Elapsed: 00:00:00.00
+SQL> insert into emp values(8,'h');
+
+1 row created.
+
+Elapsed: 00:00:00.00
+SQL> insert into emp values(9,'i');
+
+1 row created.
+
+Elapsed: 00:00:00.00
+SQL> insert into emp values(10,'j');
+
+1 row created.
+
+Elapsed: 00:00:00.00
+
+SQL> create index emp_index_name on emp(name);
+
+Index created.
+
+Elapsed: 00:00:00.01
+SQL> select index_name,compression,leaf_blocks,distinct_keys,num_rows from user_indexes where index_name='EMP_INDEX_NAME
+';
+
+INDEX_NAME                     COMPRESS LEAF_BLOCKS DISTINCT_KEYS   NUM_ROWS
+------------------------------ -------- ----------- ------------- ----------
+EMP_INDEX_NAME                 DISABLED           1            10         10
+
+Elapsed: 00:00:00.00
+
+SQL> drop index emp_index_name;
+
+Index dropped.
+
+Elapsed: 00:00:00.04
+SQL> create index emp_index_name on emp(name);
+
+Index created.
+
+Elapsed: 00:00:00.01
+SQL> select index_name,compression,leaf_blocks,distinct_keys,num_rows from user_indexes where index_name='EMP_INDEX_NAME
+';
+
+INDEX_NAME                     COMPRESS LEAF_BLOCKS DISTINCT_KEYS   NUM_ROWS
+------------------------------ -------- ----------- ------------- ----------
+EMP_INDEX_NAME                 DISABLED           2            11       1010
+
+Elapsed: 00:00:00.00
+SQL> declare
+  2  id number(38);
+  3  name varchar2(10);
+  4  begin
+  5  for i in 1011 .. 50000 loop
+  6  id := i;
+  7  name :='w';
+  8  insert into emp
+  9  values(id,name);
+ 10  commit;
+ 11    end loop;
+ 12  end;
+ 13   /
+
+PL/SQL procedure successfully completed.
+
+Elapsed: 00:00:04.44
+SQL> drop index emp_index_name;
+
+Index dropped.
+
+Elapsed: 00:00:00.07
+SQL> create index emp_index_name on emp(name);
+
+Index created.
+
+Elapsed: 00:00:00.06
+SQL> select index_name,compression,leaf_blocks,distinct_keys,num_rows from user_indexes where index_name='EMP_INDEX_NAME
+';
+
+INDEX_NAME                     COMPRESS LEAF_BLOCKS DISTINCT_KEYS   NUM_ROWS
+------------------------------ -------- ----------- ------------- ----------
+EMP_INDEX_NAME                 DISABLED          91            11      50000
+
+Elapsed: 00:00:00.00
+
+
+SQL> select index_name,compression,leaf_blocks,distinct_keys,num_rows from user_indexes where index_name='EMP_INDEX_NAME
+';
+
+INDEX_NAME                     COMPRESS LEAF_BLOCKS DISTINCT_KEYS   NUM_ROWS
+------------------------------ -------- ----------- ------------- ----------
+EMP_INDEX_NAME                 DISABLED          91            11      50000
+
+Elapsed: 00:00:00.00
+
+SQL> drop index emp_index_name;
+
+Index dropped.
+
+Elapsed: 00:00:00.00
+SQL> create index emp_index_name on emp(name) compress;
+
+
+declare
+id number(38);
+name varchar2(10);
+begin
+for i in 1011 .. 50000 loop
+id := i;
+name :='w';
+insert into emp
+values(id,name);
+commit;
+  end loop;
+end;
+ /
+
+Index created.
+
+Elapsed: 00:00:00.06
+SQL> select index_name,compression,leaf_blocks,distinct_keys,num_rows from user_indexes where index_name='EMP_INDEX_NAME
+';
+
+INDEX_NAME                     COMPRESS LEAF_BLOCKS DISTINCT_KEYS   NUM_ROWS
+------------------------------ -------- ----------- ------------- ----------
+EMP_INDEX_NAME                 ENABLED           77            11      50000
+
+Elapsed: 00:00:00.00
+
+
+
+  

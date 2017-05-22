@@ -1,0 +1,29 @@
+{% extends "main/header.html" %}
+{% block side %}
+{% include "signup/includes/sidebar.html" %}
+{% endblock %}
+{% block content %}
+ <table class="table table-striped">
+     <thead class="thead-inverse">
+     <tr>
+         <th>#</th>
+         <th>TITLE</th>
+         <th>DATE</th>
+         <th></th>
+     </tr>
+     </thead>
+     <tbody>
+   {% for docs in documents %}
+     <tr>
+         <td>{{forloop.counter}}</td>
+    <td><a href="/page/{{docs.uuid}}/"> {{docs.name}}</a></td>
+         <td></td>
+         <td>{{docs.date_uploaded}}</td>
+
+     </tr>
+   {% endfor %}
+     </tbody>
+ </table>
+{% endblock %}
+
+

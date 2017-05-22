@@ -1,0 +1,30 @@
+{% extends "main/header.html" %}
+{% block side %}
+{% include "signup/includes/sidebar.html" %}
+{% endblock %}
+{% block content %}
+     <div class="col-sm-10">
+         <strong>Document Name:</strong>
+         <p>{{docs.name}}</p>
+     </div>
+     <br> <br>
+<div class="col-sm-10">
+	<strong>{{form.image.label}}</strong>
+	<form id="upload_form" method="POST"   enctype="multipart/form-data" action= "">
+	      {% csrf_token %}
+								<div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <span class="text-danger small">{{ form.errors}}</span>
+        </div>
+        <div class="col-sm-10">{{ form.image}}</div>
+    </div>
+								<div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+															<div class="col-sm-10">
+  <button type="submit" class="btn btn-primary btn-lg" >Upload</button>
+                            </div>
+  </div>
+                                </div>
+      </form>
+</div>
+{% endblock %}

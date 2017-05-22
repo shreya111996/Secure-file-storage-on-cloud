@@ -1,0 +1,17 @@
+{% extends "main/header.html" %}
+{% block side %}
+{% include "signup/includes/sidebar.html" %}
+{% endblock %}
+{% block content %}
+    <h4>User:</h4>
+    <p>{{docs.user}}</p>
+    <h4>Document name:</h4>
+    <p>{{docs.name}}</p>
+    <h4>Date uploaded:</h4>
+    <p>{{docs.date_uploaded}}</p>
+    <h4>Encrypted document:</h4>
+    <a href="{{docs.document_url}}">DOWNLOAD</a>
+    <h4>To Decrypt the document:</h4>
+    <a href="/page/{{docs.uuid}}/decrypt/">Click here.</a>
+
+{% endblock %}

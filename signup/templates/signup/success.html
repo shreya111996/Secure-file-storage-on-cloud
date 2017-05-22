@@ -1,0 +1,8 @@
+{% extends "main/header.html" %}
+{% block side %}
+{% include "signup/includes/sidebar.html" %}
+{% endblock %}
+{% block content %}
+	<h2>Decryption Successful!!</h2>
+    <a href={{file_path}}>{{docs.name}}:</a>
+{% endblock %}
