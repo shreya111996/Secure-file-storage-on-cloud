@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'u2f+eio_bsxcof+-z9ri*_7!r6yv9&jzpwq-en^a$we7-__zzo'
+SECRET_KEY = '<provide your secret_key here>'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -126,8 +126,8 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-AWS_KEY='AKIAILDQFJMQFDEJFP4A'
-AWS_SECRET_KEY='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'
-BUCKET_NAME1='bucketawsdemo'
-BUCKET_NAME2='temporarybucketaws'
-REGION_HOST = 's3.ap-south-1.amazonaws.com'
+AWS_KEY='<provide your aws_key here>'
+AWS_SECRET_KEY='<provide your aws_secret_key here>'
+BUCKET_NAME1='<provide your bucket_name here>'
+BUCKET_NAME2='<provide your bucket_name here>'
+REGION_HOST = '<provide your region_host here>'
